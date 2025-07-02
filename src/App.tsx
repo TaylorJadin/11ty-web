@@ -7,6 +7,8 @@ import { FileTree } from './components/FileTree';
 import { CodeEditor } from './components/CodeEditor';
 import { PreviewPane } from './components/PreviewPane';
 import { BuildOutput } from './components/BuildOutput';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 function App() {
   const [files, setFiles] = useState<FileNode[]>(() => createDefaultProject());
@@ -60,6 +62,21 @@ function App() {
     }
   }, [files]);
 
+  const handleDownload = useCallback(async () => {
+    if (!buildResult || !buildResult.files || buildResult.files.length === 0) {
+      alert('No build output to export. Please build the site first.');
+      return;
+    }
+    const zip = new JSZip();
+    buildResult.files.forEach(file => {
+      // Remove leading _site/ from outputPath for zip root
+      const zipPath = file.outputPath.replace(/^_site\//, '');
+      zip.file(zipPath, file.content);
+    });
+    const blob = await zip.generateAsync({ type: 'blob' });
+    saveAs(blob, '11ty-site.zip');
+  }, [buildResult]);
+
   // Auto-select first file on initial load
   React.useEffect(() => {
     if (!selectedFile && files.length > 0) {
@@ -76,6 +93,7 @@ function App() {
         onBuild={handleBuild}
         isBuilding={isBuilding}
         projectName="My 11ty Site"
+        onDownload={handleDownload}
       />
       
       <div className="flex-1 flex overflow-hidden">

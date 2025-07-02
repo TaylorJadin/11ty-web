@@ -5,9 +5,10 @@ interface HeaderProps {
   onBuild: () => void;
   isBuilding: boolean;
   projectName: string;
+  onDownload: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onBuild, isBuilding, projectName }) => {
+export const Header: React.FC<HeaderProps> = ({ onBuild, isBuilding, projectName, onDownload }) => {
   return (
     <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
@@ -16,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({ onBuild, isBuilding, projectName
             <Zap className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 className="font-semibold text-gray-900">11ty Browser Editor</h1>
+            <h1 className="font-semibold text-gray-900">11tyWeb</h1>
           </div>
         </div>
         
@@ -50,8 +51,16 @@ export const Header: React.FC<HeaderProps> = ({ onBuild, isBuilding, projectName
           )}
         </button>
         
-        <button className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm font-medium">
+        <button
+          className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm font-medium"
+        >
           <Settings className="w-4 h-4" />
+        </button>
+        <button
+          onClick={onDownload}
+          className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm font-medium"
+        >
+          <Download className="w-4 h-4" />
         </button>
       </div>
     </header>
